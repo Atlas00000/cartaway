@@ -7,8 +7,21 @@ import { AuthInitializer } from '@/components/auth/AuthInitializer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'E-Commerce Platform',
-  description: 'Modern e-commerce platform with Django backend and Next.js frontend',
+  title: 'CartAway - Your Gateway to Premium Shopping',
+  description: 'Discover curated products from top brands, delivered with excellence and backed by our commitment to quality.',
+  keywords: 'ecommerce, shopping, premium products, online store, CartAway',
+  authors: [{ name: 'CartAway Team' }],
+  openGraph: {
+    title: 'CartAway - Your Gateway to Premium Shopping',
+    description: 'Discover curated products from top brands, delivered with excellence and backed by our commitment to quality.',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CartAway - Your Gateway to Premium Shopping',
+    description: 'Discover curated products from top brands, delivered with excellence and backed by our commitment to quality.',
+  },
 };
 
 export default function RootLayout({
@@ -17,16 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
-        <AuthInitializer>
-          <div className="min-h-screen bg-gray-50">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-          </div>
-        </AuthInitializer>
+        <AuthInitializer />
+        <Header />
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );

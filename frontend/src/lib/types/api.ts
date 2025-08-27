@@ -83,6 +83,8 @@ export interface Product {
   is_in_stock: boolean;
   is_low_stock: boolean;
   discount_percentage: number;
+  rating?: number;
+  review_count?: number;
   images: ProductImage[];
   variants: ProductVariant[];
   reviews: ProductReview[];
@@ -115,6 +117,7 @@ export interface Category {
   image?: string;
   parent?: Category;
   children: Category[];
+  product_count?: number;
   is_active: boolean;
   created_at: string;
   updated_at: string;

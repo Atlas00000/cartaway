@@ -70,3 +70,4 @@ INFO 2025-08-26 20:29:18,136 middleware 146 140428797864832 API Request: {"type"
 INFO 2025-08-26 20:29:18,370 middleware 146 140428797864832 API Response: {"type": "response", "method": "GET", "path": "/api/redoc/", "status_code": 200, "duration": "0.234s", "user": "anonymous"}
 INFO 2025-08-26 20:29:18,385 middleware 146 140428797864832 API Request: {"type": "request", "method": "GET", "path": "/api/docs/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
 INFO 2025-08-26 20:29:18,403 middleware 146 140428797864832 API Response: {"type": "response", "method": "GET", "path": "/api/docs/", "status_code": 200, "duration": "0.018s", "user": "anonymous"}
+INFO 2025-08-27 16:12:54,624 autoreload 84811 140704613247424 Watching for file changes with StatReloader
