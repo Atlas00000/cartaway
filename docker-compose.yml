@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ecommerce_postgres
+    environment:
+      POSTGRES_DB: ecommerce_db
+      POSTGRES_USER: ecommerce_user
+      POSTGRES_PASSWORD: ecommerce_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ecommerce_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ecommerce_network
+
+  # Django Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ecommerce_backend
+    environment:
+      - DEBUG=1
+      - DJANGO_SETTINGS_MODULE=core.settings
+      - DATABASE_URL=postgresql://ecommerce_user:ecommerce_password@postgres:5432/ecommerce_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=your-secret-key-change-in-production
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ecommerce_network
+    command: python manage.py runserver 0.0.0.0:8000
+
+
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:
+
+networks:
+  ecommerce_network:
+    driver: bridge

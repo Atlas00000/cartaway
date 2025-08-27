@@ -1,0 +1,72 @@
+INFO 2025-08-26 19:25:06,995 autoreload 15 139832625646464 Watching for file changes with StatReloader
+INFO 2025-08-26 19:25:16,288 autoreload 7 140641497623424 Watching for file changes with StatReloader
+INFO 2025-08-26 19:25:25,313 middleware 7 140641375880896 API Request: {"type": "request", "method": "GET", "path": "/api/health/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:25:25,347 middleware 7 140641375880896 API Response: {"type": "response", "method": "GET", "path": "/api/health/", "status_code": 200, "duration": "0.034s", "user": "anonymous"}
+INFO 2025-08-26 19:25:25,349 basehttp 7 140641375880896 "GET /api/health/ HTTP/1.1" 200 215
+INFO 2025-08-26 19:25:31,111 middleware 7 140641375880896 API Request: {"type": "request", "method": "GET", "path": "/api/health/detailed/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:25:31,132 middleware 7 140641375880896 API Response: {"type": "response", "method": "GET", "path": "/api/health/detailed/", "status_code": 200, "duration": "0.020s", "user": "anonymous"}
+INFO 2025-08-26 19:25:31,133 basehttp 7 140641375880896 "GET /api/health/detailed/ HTTP/1.1" 200 547
+INFO 2025-08-26 19:25:36,747 middleware 7 140641375880896 API Request: {"type": "request", "method": "GET", "path": "/api/schema/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+WARNING 2025-08-26 19:25:39,766 middleware 7 140641375880896 Slow API Request: /api/schema/ took 3.018s
+INFO 2025-08-26 19:25:39,767 middleware 7 140641375880896 API Response: {"type": "response", "method": "GET", "path": "/api/schema/", "status_code": 200, "duration": "3.020s", "user": "anonymous"}
+INFO 2025-08-26 19:25:39,769 basehttp 7 140641375880896 "GET /api/schema/ HTTP/1.1" 200 416686
+INFO 2025-08-26 19:25:43,292 middleware 7 140641375880896 API Request: {"type": "request", "method": "HEAD", "path": "/api/docs/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:25:43,602 middleware 7 140641375880896 API Response: {"type": "response", "method": "HEAD", "path": "/api/docs/", "status_code": 200, "duration": "0.310s", "user": "anonymous"}
+INFO 2025-08-26 19:25:43,603 basehttp 7 140641375880896 "HEAD /api/docs/ HTTP/1.1" 200 0
+INFO 2025-08-26 19:25:48,810 middleware 7 140641375880896 API Request: {"type": "request", "method": "POST", "path": "/api/v1/auth/login/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:25:49,410 middleware 7 140641375880896 API Response: {"type": "response", "method": "POST", "path": "/api/v1/auth/login/", "status_code": 200, "duration": "0.600s", "user": "anonymous"}
+INFO 2025-08-26 19:25:49,412 basehttp 7 140641375880896 "POST /api/v1/auth/login/ HTTP/1.1" 200 696
+INFO 2025-08-26 19:25:49,440 middleware 7 140641375880896 API Request: {"type": "request", "method": "GET", "path": "/api/v1/products/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:25:49,468 middleware 7 140641375880896 API Response: {"type": "response", "method": "GET", "path": "/api/v1/products/", "status_code": 200, "duration": "0.029s", "user": "testuser"}
+INFO 2025-08-26 19:25:49,473 basehttp 7 140641375880896 "GET /api/v1/products/ HTTP/1.1" 200 10171
+INFO 2025-08-26 19:26:00,353 middleware 7 140641375880896 API Request: {"type": "request", "method": "GET", "path": "/api/health/ready/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:26:00,367 middleware 7 140641375880896 API Response: {"type": "response", "method": "GET", "path": "/api/health/ready/", "status_code": 200, "duration": "0.015s", "user": "anonymous"}
+INFO 2025-08-26 19:26:00,368 basehttp 7 140641375880896 "GET /api/health/ready/ HTTP/1.1" 200 65
+INFO 2025-08-26 19:26:00,389 middleware 7 140641375880896 API Request: {"type": "request", "method": "GET", "path": "/api/health/live/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:26:00,393 middleware 7 140641375880896 API Response: {"type": "response", "method": "GET", "path": "/api/health/live/", "status_code": 200, "duration": "0.005s", "user": "anonymous"}
+INFO 2025-08-26 19:26:00,395 basehttp 7 140641375880896 "GET /api/health/live/ HTTP/1.1" 200 73
+INFO 2025-08-26 19:26:07,980 middleware 7 140641375880896 API Request: {"type": "request", "method": "POST", "path": "/api/v1/auth/login/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:26:08,514 middleware 7 140641375880896 API Response: {"type": "response", "method": "POST", "path": "/api/v1/auth/login/", "status_code": 200, "duration": "0.534s", "user": "anonymous"}
+INFO 2025-08-26 19:26:08,515 basehttp 7 140641375880896 "POST /api/v1/auth/login/ HTTP/1.1" 200 696
+INFO 2025-08-26 19:26:08,543 middleware 7 140641375880896 API Request: {"type": "request", "method": "HEAD", "path": "/api/v1/products/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 19:26:08,565 middleware 7 140641375880896 API Response: {"type": "response", "method": "HEAD", "path": "/api/v1/products/", "status_code": 200, "duration": "0.022s", "user": "testuser"}
+INFO 2025-08-26 19:26:08,566 basehttp 7 140641375880896 "HEAD /api/v1/products/ HTTP/1.1" 200 0
+INFO 2025-08-26 20:27:45,854 autoreload 7 140467255876480 Watching for file changes with StatReloader
+INFO 2025-08-26 20:27:56,770 middleware 7 140467134006976 API Request: {"type": "request", "method": "GET", "path": "/api/health/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 20:27:56,815 middleware 7 140467134006976 API Response: {"type": "response", "method": "GET", "path": "/api/health/", "status_code": 200, "duration": "0.046s", "user": "anonymous"}
+INFO 2025-08-26 20:27:56,816 basehttp 7 140467134006976 "GET /api/health/ HTTP/1.1" 200 215
+INFO 2025-08-26 20:28:01,479 middleware 7 140467134006976 API Request: {"type": "request", "method": "GET", "path": "/api/health/detailed/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 20:28:01,509 middleware 7 140467134006976 API Response: {"type": "response", "method": "GET", "path": "/api/health/detailed/", "status_code": 200, "duration": "0.030s", "user": "anonymous"}
+INFO 2025-08-26 20:28:01,510 basehttp 7 140467134006976 "GET /api/health/detailed/ HTTP/1.1" 200 547
+INFO 2025-08-26 20:28:05,933 middleware 7 140467134006976 API Request: {"type": "request", "method": "GET", "path": "/api/schema/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+WARNING 2025-08-26 20:28:10,373 middleware 7 140467134006976 Slow API Request: /api/schema/ took 4.439s
+INFO 2025-08-26 20:28:10,373 middleware 7 140467134006976 API Response: {"type": "response", "method": "GET", "path": "/api/schema/", "status_code": 200, "duration": "4.440s", "user": "anonymous"}
+INFO 2025-08-26 20:28:10,376 basehttp 7 140467134006976 "GET /api/schema/ HTTP/1.1" 200 416686
+INFO 2025-08-26 20:28:15,926 middleware 7 140467134006976 API Request: {"type": "request", "method": "POST", "path": "/api/v1/auth/login/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 20:28:16,563 middleware 7 140467134006976 API Response: {"type": "response", "method": "POST", "path": "/api/v1/auth/login/", "status_code": 200, "duration": "0.637s", "user": "anonymous"}
+INFO 2025-08-26 20:28:16,564 basehttp 7 140467134006976 "POST /api/v1/auth/login/ HTTP/1.1" 200 696
+INFO 2025-08-26 20:28:16,601 middleware 7 140467134006976 API Request: {"type": "request", "method": "HEAD", "path": "/api/v1/products/", "user": "anonymous", "ip": "192.168.65.1", "user_agent": "curl/8.7.1"}
+INFO 2025-08-26 20:28:16,995 middleware 7 140467134006976 API Response: {"type": "response", "method": "HEAD", "path": "/api/v1/products/", "status_code": 200, "duration": "0.394s", "user": "testuser"}
+INFO 2025-08-26 20:28:16,998 basehttp 7 140467134006976 "HEAD /api/v1/products/ HTTP/1.1" 200 0
+INFO 2025-08-26 20:28:34,667 middleware 74 140031547063168 API Request: {"type": "request", "method": "GET", "path": "/api/health/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:28:34,697 middleware 74 140031547063168 API Response: {"type": "response", "method": "GET", "path": "/api/health/", "status_code": 200, "duration": "0.030s", "user": "anonymous"}
+INFO 2025-08-26 20:28:34,717 middleware 74 140031547063168 API Request: {"type": "request", "method": "GET", "path": "/api/health/detailed/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:28:34,731 middleware 74 140031547063168 API Response: {"type": "response", "method": "GET", "path": "/api/health/detailed/", "status_code": 200, "duration": "0.014s", "user": "anonymous"}
+INFO 2025-08-26 20:28:34,737 middleware 74 140031547063168 API Request: {"type": "request", "method": "GET", "path": "/api/health/live/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:28:34,746 middleware 74 140031547063168 API Response: {"type": "response", "method": "GET", "path": "/api/health/live/", "status_code": 200, "duration": "0.009s", "user": "anonymous"}
+INFO 2025-08-26 20:28:34,756 middleware 74 140031547063168 API Request: {"type": "request", "method": "GET", "path": "/api/health/ready/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:28:34,765 middleware 74 140031547063168 API Response: {"type": "response", "method": "GET", "path": "/api/health/ready/", "status_code": 200, "duration": "0.010s", "user": "anonymous"}
+INFO 2025-08-26 20:28:48,719 middleware 80 140317290417024 API Request: {"type": "request", "method": "GET", "path": "/api/schema/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+WARNING 2025-08-26 20:28:51,955 middleware 80 140317290417024 Slow API Request: /api/schema/ took 3.233s
+INFO 2025-08-26 20:28:51,957 middleware 80 140317290417024 API Response: {"type": "response", "method": "GET", "path": "/api/schema/", "status_code": 200, "duration": "3.238s", "user": "anonymous"}
+INFO 2025-08-26 20:28:51,977 middleware 80 140317290417024 API Request: {"type": "request", "method": "GET", "path": "/api/redoc/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:28:52,195 middleware 80 140317290417024 API Response: {"type": "response", "method": "GET", "path": "/api/redoc/", "status_code": 200, "duration": "0.218s", "user": "anonymous"}
+INFO 2025-08-26 20:28:52,205 middleware 80 140317290417024 API Request: {"type": "request", "method": "GET", "path": "/api/docs/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:28:52,224 middleware 80 140317290417024 API Response: {"type": "response", "method": "GET", "path": "/api/docs/", "status_code": 200, "duration": "0.024s", "user": "anonymous"}
+INFO 2025-08-26 20:29:15,066 middleware 146 140428797864832 API Request: {"type": "request", "method": "GET", "path": "/api/schema/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+WARNING 2025-08-26 20:29:18,125 middleware 146 140428797864832 Slow API Request: /api/schema/ took 3.056s
+INFO 2025-08-26 20:29:18,128 middleware 146 140428797864832 API Response: {"type": "response", "method": "GET", "path": "/api/schema/", "status_code": 200, "duration": "3.062s", "user": "anonymous"}
+INFO 2025-08-26 20:29:18,136 middleware 146 140428797864832 API Request: {"type": "request", "method": "GET", "path": "/api/redoc/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:29:18,370 middleware 146 140428797864832 API Response: {"type": "response", "method": "GET", "path": "/api/redoc/", "status_code": 200, "duration": "0.234s", "user": "anonymous"}
+INFO 2025-08-26 20:29:18,385 middleware 146 140428797864832 API Request: {"type": "request", "method": "GET", "path": "/api/docs/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": ""}
+INFO 2025-08-26 20:29:18,403 middleware 146 140428797864832 API Response: {"type": "response", "method": "GET", "path": "/api/docs/", "status_code": 200, "duration": "0.018s", "user": "anonymous"}
