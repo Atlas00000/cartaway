@@ -22,6 +22,103 @@ import { Button } from '@/components/ui/Button';
 import { productsApi } from '@/lib/api/products';
 import { Product, Category } from '@/lib/types/api';
 
+// Mock data for when backend is not available
+const mockProducts: any[] = [
+  {
+    id: 1,
+    name: "Premium Wireless Headphones",
+    description: "High-quality wireless headphones with noise cancellation and premium sound quality.",
+    price: 299.99,
+    compare_price: 399.99,
+    stock_quantity: 50,
+    is_featured: true,
+    rating: 4.8,
+    review_count: 156,
+    images: [{ 
+      id: 1, 
+      image: "/api/media/products/headphones.jpg", 
+      alt_text: "Wireless Headphones",
+      product: 1,
+      is_primary: true,
+      order: 1
+    }]
+  },
+  {
+    id: 2,
+    name: "Luxury Smart Watch",
+    description: "Premium smartwatch with health tracking and elegant design for the modern lifestyle.",
+    price: 599.99,
+    compare_price: 699.99,
+    stock_quantity: 25,
+    is_featured: true,
+    rating: 4.9,
+    review_count: 89,
+    images: [{ 
+      id: 2, 
+      image: "/api/media/products/smartwatch.jpg", 
+      alt_text: "Smart Watch",
+      product: 2,
+      is_primary: true,
+      order: 1
+    }]
+  },
+  {
+    id: 3,
+    name: "Designer Leather Bag",
+    description: "Handcrafted leather bag with premium materials and timeless design.",
+    price: 199.99,
+    compare_price: 249.99,
+    stock_quantity: 30,
+    is_featured: true,
+    rating: 4.7,
+    review_count: 203,
+    images: [{ 
+      id: 3, 
+      image: "/api/media/products/leather-bag.jpg", 
+      alt_text: "Leather Bag",
+      product: 3,
+      is_primary: true,
+      order: 1
+    }]
+  }
+];
+
+const mockCategories: any[] = [
+  {
+    id: 1,
+    name: "Electronics",
+    slug: "electronics",
+    description: "Premium electronic devices and gadgets",
+    product_count: 150,
+    children: [],
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 2,
+    name: "Fashion",
+    slug: "fashion",
+    description: "Luxury fashion items and accessories",
+    product_count: 200,
+    children: [],
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 3,
+    name: "Home & Living",
+    slug: "home-living",
+    description: "Premium home decor and lifestyle products",
+    product_count: 120,
+    children: [],
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
 export default function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -40,9 +137,13 @@ export default function HomePage() {
         ]);
         setFeaturedProducts(productsData || []);
         setCategories(categoriesData || []);
+        setError(null);
       } catch (err) {
-        setError('Failed to load data');
-        console.error('Error fetching data:', err);
+        console.warn('Backend not available, using mock data:', err);
+        // Use mock data when backend is not available
+        setFeaturedProducts(mockProducts as Product[]);
+        setCategories(mockCategories as Category[]);
+        setError('Backend connection failed - showing demo data');
       } finally {
         setIsLoading(false);
       }
@@ -92,18 +193,6 @@ export default function HomePage() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen luxury-bg flex items-center justify-center">
-        <div className="text-center">
-          <Shield className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
-          <p className="text-muted-foreground">{error}</p>
-        </div>
-      </div>
-    );
-  }
-
   const productSets = [];
   for (let i = 0; i < featuredProducts.length; i += 3) {
     productSets.push(featuredProducts.slice(i, i + 3));
@@ -111,6 +200,16 @@ export default function HomePage() {
 
   return (
     <div className="luxury-bg min-h-screen">
+      {/* Backend Connection Warning */}
+      {error && (
+        <div className="fixed top-4 right-4 z-50 bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg">
+          <div className="flex items-center space-x-2">
+            <Shield className="w-4 h-4" />
+            <span className="text-sm">Demo Mode - Backend Offline</span>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section - Enhanced Organic Shape */}
       <section 
         id="hero"
