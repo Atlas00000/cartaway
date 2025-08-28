@@ -484,3 +484,18 @@ INFO 2025-08-28 16:33:23,011 basehttp 7 140275135547072 "GET /api/v1/admin/order
 INFO 2025-08-28 16:33:23,601 middleware 7 140275135547072 API Request: {"type": "request", "method": "GET", "path": "/api/v1/admin/users/", "user": "admin", "ip": "142.250.201.10", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
 INFO 2025-08-28 16:33:23,610 middleware 7 140275135547072 API Response: {"type": "response", "method": "GET", "path": "/api/v1/admin/users/", "status_code": 200, "duration": "0.024s", "user": "admin"}
 INFO 2025-08-28 16:33:23,611 basehttp 7 140275135547072 "GET /api/v1/admin/users/ HTTP/1.1" 200 373
+INFO 2025-08-28 16:51:15,568 middleware 7 140275135547072 API Request: {"type": "request", "method": "GET", "path": "/api/v1/products/", "user": "anonymous", "ip": "142.250.201.10", "user_agent": "curl/8.7.1"}
+INFO 2025-08-28 16:51:15,744 middleware 7 140275135547072 API Response: {"type": "response", "method": "GET", "path": "/api/v1/products/", "status_code": 200, "duration": "0.176s", "user": "anonymous"}
+INFO 2025-08-28 16:51:15,747 basehttp 7 140275135547072 "GET /api/v1/products/ HTTP/1.1" 200 7779
+INFO 2025-08-28 16:51:20,208 middleware 7 140275135547072 API Request: {"type": "request", "method": "GET", "path": "/api/v1/categories/", "user": "anonymous", "ip": "142.250.201.10", "user_agent": "curl/8.7.1"}
+INFO 2025-08-28 16:51:20,253 middleware 7 140275135547072 API Response: {"type": "response", "method": "GET", "path": "/api/v1/categories/", "status_code": 200, "duration": "0.045s", "user": "anonymous"}
+INFO 2025-08-28 16:51:20,254 basehttp 7 140275135547072 "GET /api/v1/categories/ HTTP/1.1" 200 1160
+INFO 2025-08-28 16:51:29,184 middleware 7 140275135547072 API Request: {"type": "request", "method": "GET", "path": "/api/v1/products/", "user": "anonymous", "ip": "142.250.201.10", "user_agent": "curl/8.7.1"}
+INFO 2025-08-28 16:51:29,198 middleware 7 140275135547072 API Response: {"type": "response", "method": "GET", "path": "/api/v1/products/", "status_code": 200, "duration": "0.014s", "user": "anonymous"}
+INFO 2025-08-28 16:51:29,200 basehttp 7 140275135547072 "GET /api/v1/products/?featured=true HTTP/1.1" 200 7779
+INFO 2025-08-28 16:52:11,466 middleware 7 140275125061312 API Request: {"type": "request", "method": "GET", "path": "/api/v1/products/", "user": "anonymous", "ip": "142.250.201.10", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+INFO 2025-08-28 16:52:11,469 middleware 7 140275039078080 API Request: {"type": "request", "method": "GET", "path": "/api/v1/categories/", "user": "anonymous", "ip": "142.250.201.10", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+INFO 2025-08-28 16:52:11,477 middleware 7 140275125061312 API Response: {"type": "response", "method": "GET", "path": "/api/v1/products/", "status_code": 200, "duration": "0.011s", "user": "anonymous"}
+INFO 2025-08-28 16:52:11,478 basehttp 7 140275125061312 "GET /api/v1/products/?featured=true&limit=6 HTTP/1.1" 200 7779
+INFO 2025-08-28 16:52:11,524 middleware 7 140275039078080 API Response: {"type": "response", "method": "GET", "path": "/api/v1/categories/", "status_code": 200, "duration": "0.055s", "user": "anonymous"}
+INFO 2025-08-28 16:52:11,525 basehttp 7 140275039078080 "GET /api/v1/categories/ HTTP/1.1" 200 1160
