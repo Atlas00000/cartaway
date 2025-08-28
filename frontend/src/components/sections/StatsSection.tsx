@@ -50,59 +50,70 @@ const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
   ];
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            CartAway by the Numbers
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Trusted by thousands of customers worldwide. Our commitment to quality 
-            and service speaks through our achievements.
+    <section className="py-24 bg-gradient-to-br from-neutral-50 to-white relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-primary opacity-5 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-gradient-warm opacity-5 rounded-full blur-2xl"></div>
+      </div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16 animate-fade-in-down">
+          <h2 className="text-4xl lg:text-5xl font-display text-neutral-900 mb-6">CartAway by the Numbers</h2>
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+            Trusted by thousands of customers worldwide. Our commitment to quality and service speaks through our achievements.
           </p>
         </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
           {statItems.map((item, index) => (
             <div
               key={index}
-              className="text-center group hover:scale-105 transition-transform duration-300"
+              className="text-center group hover-lift animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-full mb-4 group-hover:bg-indigo-200 transition-colors">
-                <item.icon className="w-8 h-8 text-indigo-600" />
+              <div className="relative mb-6">
+                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl shadow-glow transition-all duration-300 group-hover:scale-110 ${
+                  index === 0 ? 'bg-gradient-primary group-hover:shadow-glow-warm' :
+                  index === 1 ? 'bg-gradient-warm group-hover:shadow-glow-rose' :
+                  index === 2 ? 'bg-gradient-sunset group-hover:shadow-glow-accent' :
+                  'bg-gradient-fire group-hover:shadow-glow-warm'
+                }`}>
+                  <item.icon className="w-10 h-10 text-white" />
+                </div>
+                <div className={`absolute -inset-2 rounded-2xl opacity-0 group-hover:opacity-20 blur transition-opacity duration-300 ${
+                  index === 0 ? 'bg-gradient-primary' :
+                  index === 1 ? 'bg-gradient-warm' :
+                  index === 2 ? 'bg-gradient-sunset' :
+                  'bg-gradient-fire'
+                }`}></div>
               </div>
               <div className="space-y-2">
-                <div className="text-3xl font-bold text-gray-900">
-                  {item.value}
-                </div>
-                <div className="text-lg font-medium text-gray-700">
-                  {item.label}
-                </div>
-                <div className="text-sm text-gray-500">
-                  {item.description}
-                </div>
+                <div className="text-4xl font-display text-gradient">{item.value}</div>
+                <div className="text-xl font-heading text-neutral-800">{item.label}</div>
+                <div className="text-sm text-neutral-500">{item.description}</div>
               </div>
             </div>
           ))}
         </div>
-
-        {/* Additional Trust Indicators */}
-        <div className="mt-16 pt-12 border-t border-gray-200">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-2xl font-bold text-indigo-600 mb-2">99.9%</div>
-              <div className="text-gray-700 font-medium">Uptime</div>
-              <div className="text-sm text-gray-500">Reliable service</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-indigo-600 mb-2">4.9/5</div>
-              <div className="text-gray-700 font-medium">Customer Rating</div>
-              <div className="text-sm text-gray-500">Based on reviews</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-indigo-600 mb-2">24/7</div>
-              <div className="text-gray-700 font-medium">Support</div>
-              <div className="text-sm text-gray-500">Always available</div>
+        
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-primary opacity-5 rounded-3xl blur-3xl"></div>
+          <div className="relative bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl p-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              {[
+                { number: '99.9%', label: 'Uptime', subtitle: 'Reliable service' },
+                { number: '4.9/5', label: 'Customer Rating', subtitle: 'Based on reviews' },
+                { number: '24/7', label: 'Support', subtitle: 'Always available' }
+              ].map((metric, index) => (
+                <div key={index} className="group animate-fade-in-up" style={{ animationDelay: `${index * 0.2}s` }}>
+                  <div className="text-3xl font-display text-gradient mb-3 group-hover:scale-110 transition-transform duration-300">
+                    {metric.number}
+                  </div>
+                  <div className="text-lg font-heading text-neutral-800 mb-2">{metric.label}</div>
+                  <div className="text-sm text-neutral-500">{metric.subtitle}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

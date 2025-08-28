@@ -86,39 +86,47 @@ const FeaturedProducts: React.FC = () => {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 bg-gradient-to-br from-neutral-50 to-white relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-fire opacity-5 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-gradient-warm opacity-5 rounded-full blur-2xl"></div>
+      </div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12 animate-fade-in-down">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl lg:text-5xl font-display text-neutral-900 mb-6">
               Featured Products
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-xl text-neutral-600 leading-relaxed">
               Discover our handpicked collection of premium products
             </p>
           </div>
-          <Button variant="outline" className="mt-4 sm:mt-0 group">
-            View All Products
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <button className="relative px-8 py-4 bg-white/80 backdrop-blur-sm border border-white/30 rounded-xl text-neutral-700 font-semibold hover:bg-white hover:shadow-premium transition-all duration-300 group mt-4 sm:mt-0">
+            <span className="relative z-10">View All Products</span>
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 rounded-xl transition-opacity duration-300"></div>
+          </button>
         </div>
 
         {/* Products Grid */}
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={handleAddToCart}
-                onAddToWishlist={handleAddToWishlist}
-              />
+            {products.map((product, index) => (
+              <div key={product.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <ProductCard
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                  onAddToWishlist={handleAddToWishlist}
+                />
+              </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="text-gray-500 mb-4">No featured products available</div>
+            <div className="text-neutral-500 mb-4">No featured products available</div>
             <Button onClick={() => window.location.reload()}>
               Refresh
             </Button>
@@ -127,11 +135,11 @@ const FeaturedProducts: React.FC = () => {
 
         {/* View More Button */}
         {products.length > 0 && (
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" className="group">
+          <div className="text-center mt-12 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <button className="btn-premium group">
               Load More Products
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            </button>
           </div>
         )}
       </div>

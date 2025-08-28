@@ -59,6 +59,11 @@ export const api = {
     return response.data;
   },
 
+  getBestsellers: async () => {
+    const response = await apiClient.get('/products/bestsellers/');
+    return response.data;
+  },
+
   getProduct: async (id: string) => {
     const response = await apiClient.get(`/products/${id}/`);
     return response.data;
