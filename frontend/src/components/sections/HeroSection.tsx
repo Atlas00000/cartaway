@@ -64,29 +64,14 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
           
-          {/* Hero Image */}
+          {/* Enhanced Background Elements */}
           <div className="relative animate-fade-in-right">
-            <div className="relative z-10">
-              <div className="card-premium bg-white/90 backdrop-blur-sm border-white/30 p-12">
-                <div className="text-center space-y-6">
-                  <div className="relative mx-auto w-32 h-32">
-                    <div className="absolute inset-0 bg-gradient-primary rounded-full opacity-20 animate-pulse-slow"></div>
-                    <div className="relative w-full h-full bg-gradient-primary rounded-full flex items-center justify-center shadow-glow">
-                      <ShoppingBag className="w-16 h-16 text-white" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-3xl font-heading text-neutral-900">Premium Collection</h3>
-                    <p className="text-neutral-600">Curated products for the modern lifestyle</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
             {/* Floating Elements */}
             <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-warm rounded-full opacity-30 animate-float"></div>
             <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-gradient-sunset rounded-full opacity-30 animate-float" style={{ animationDelay: '1s' }}></div>
             <div className="absolute top-1/2 -right-12 w-16 h-16 bg-gradient-fire rounded-full opacity-20 animate-float" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute top-1/3 -left-8 w-12 h-12 bg-gradient-primary rounded-full opacity-25 animate-float" style={{ animationDelay: '0.5s' }}></div>
+            <div className="absolute bottom-1/3 -right-4 w-8 h-8 bg-gradient-rose rounded-full opacity-20 animate-float" style={{ animationDelay: '1.5s' }}></div>
           </div>
         </div>
       </div>
