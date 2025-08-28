@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Custom Admin Panel Interface
+    path('panel/', views.custom_admin_panel, name='custom_admin_panel'),
+    
     # Dashboard
     path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
     

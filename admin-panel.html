@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .sidebar h1 {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #34495e;
+            font-size: 1.5rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .nav-menu li {
+            margin: 0;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h2 {
+            color: #2c3e50;
+        }
+
+        .login-section {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            color: #e74c3c;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginSection" class="login-section">
+        <h2>Admin Login</h2>
+        <div id="loginError" class="error hidden"></div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="admin@example.com">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" value="admin123">
+        </div>
+        <button class="btn" onclick="login()">Login</button>
+    </div>
+
+    <div id="adminPanel" class="container hidden">
+        <div class="sidebar">
+            <h1>Admin Panel</h1>
+            <ul class="nav-menu">
+                <li><a href="#" class="active" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('products')">Products</a></li>
+                <li><a href="#" onclick="showSection('orders')">Orders</a></li>
+                <li><a href="#" onclick="showSection('users')">Users</a></li>
+                <li><a href="#" onclick="showSection('inventory')">Inventory</a></li>
+                <li><a href="#" onclick="showSection('analytics')">Analytics</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboardSection">
+                <div class="header">
+                    <h2>Dashboard</h2>
+                    <button class="btn" onclick="refreshDashboard()">Refresh</button>
+                </div>
+                <div id="dashboardContent">
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3>Total Products</h3>
+                            <div class="number" id="totalProducts">-</div>
+                        </div>
+                        <div class="card">
+                            <h3>Total Orders</h3>
+                            <div class="number" id="totalOrders">-</div>
+                        </div>
+                        <div class="card">
+                            <h3>Total Users</h3>
+                            <div class="number" id="totalUsers">-</div>
+                        </div>
+                        <div class="card">
+                            <h3>Total Revenue</h3>
+                            <div class="number" id="totalRevenue">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section -->
+            <div id="productsSection" class="hidden">
+                <div class="header">
+                    <h2>Products Management</h2>
+                    <button class="btn" onclick="showAddProductModal()">Add Product</button>
+                </div>
+                <div id="productsContent"></div>
+            </div>
+
+            <!-- Orders Section -->
+            <div id="ordersSection" class="hidden">
+                <div class="header">
+                    <h2>Orders Management</h2>
+                </div>
+                <div id="ordersContent"></div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="usersSection" class="hidden">
+                <div class="header">
+                    <h2>Users Management</h2>
+                </div>
+                <div id="usersContent"></div>
+            </div>
+
+            <!-- Inventory Section -->
+            <div id="inventorySection" class="hidden">
+                <div class="header">
+                    <h2>Inventory Management</h2>
+                </div>
+                <div id="inventoryContent"></div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analyticsSection" class="hidden">
+                <div class="header">
+                    <h2>Analytics</h2>
+                </div>
+                <div id="analyticsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addProductModal')">&times;</span>
+            <h2>Add New Product</h2>
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName">
+            </div>
+            <div class="form-group">
+                <label for="productPrice">Price:</label>
+                <input type="number" id="productPrice" step="0.01">
+            </div>
+            <div class="form-group">
+                <label for="productStock">Stock Quantity:</label>
+                <input type="number" id="productStock">
+            </div>
+            <div class="form-group">
+                <label for="productDescription">Description:</label>
+                <input type="text" id="productDescription">
+            </div>
+            <button class="btn btn-success" onclick="addProduct()">Add Product</button>
+        </div>
+    </div>
+
+    <script>
+        let authToken = '';
+        const API_BASE = 'http://localhost:8000/api/v1';
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.tokens.access;
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                    loadDashboard();
+                } else {
+                    showError('loginError', data.message || 'Login failed');
+                }
+            } catch (error) {
+                showError('loginError', 'Network error. Please check if the backend is running.');
+            }
+        }
+
+        function logout() {
+            authToken = '';
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('loginError').classList.add('hidden');
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('[id$="Section"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(sectionName + 'Section').classList.remove('hidden');
+
+            // Update navigation
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load section data
+            switch(sectionName) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'products':
+                    loadProducts();
+                    break;
+                case 'orders':
+                    loadOrders();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'inventory':
+                    loadInventory();
+                    break;
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+            }
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/dashboard/`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('totalProducts').textContent = data.total_products;
+                    document.getElementById('totalOrders').textContent = data.total_orders;
+                    document.getElementById('totalUsers').textContent = data.total_users;
+                    document.getElementById('totalRevenue').textContent = `$${data.total_revenue}`;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/products/`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const productsHtml = `
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Stock</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.results.map(product => `
+                                        <tr>
+                                            <td>${product.id}</td>
+                                            <td>${product.name}</td>
+                                            <td>$${product.price}</td>
+                                            <td>${product.stock_quantity || 0}</td>
+                                            <td><span class="status-badge ${product.is_active ? 'status-active' : 'status-inactive'}">${product.is_active ? 'Active' : 'Inactive'}</span></td>
+                                            <td>
+                                                <button class="btn" onclick="editProduct(${product.id})">Edit</button>
+                                                <button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    document.getElementById('productsContent').innerHTML = productsHtml;
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/users/`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const usersHtml = `
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.results.map(user => `
+                                        <tr>
+                                            <td>${user.id}</td>
+                                            <td>${user.username}</td>
+                                            <td>${user.email}</td>
+                                            <td>${user.first_name} ${user.last_name}</td>
+                                            <td>
+                                                <button class="btn" onclick="editUser(${user.id})">Edit</button>
+                                                <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    document.getElementById('usersContent').innerHTML = usersHtml;
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        async function loadInventory() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/inventory/`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const inventoryHtml = `
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>SKU</th>
+                                        <th>Current Stock</th>
+                                        <th>Low Stock Threshold</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.map(item => `
+                                        <tr>
+                                            <td>${item.product_name}</td>
+                                            <td>${item.sku}</td>
+                                            <td>${item.current_stock}</td>
+                                            <td>${item.low_stock_threshold}</td>
+                                            <td><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-inactive'}">${item.status}</span></td>
+                                            <td>
+                                                <button class="btn btn-success" onclick="restockProduct(${item.id})">Restock</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    document.getElementById('inventoryContent').innerHTML = inventoryHtml;
+                }
+            } catch (error) {
+                console.error('Error loading inventory:', error);
+            }
+        }
+
+        async function loadAnalytics() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/analytics/`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const analyticsHtml = `
+                        <div class="dashboard-grid">
+                            <div class="card">
+                                <h3>Total Revenue</h3>
+                                <div class="number">$${data.total_revenue}</div>
+                            </div>
+                            <div class="card">
+                                <h3>Total Orders</h3>
+                                <div class="number">${data.total_orders}</div>
+                            </div>
+                            <div class="card">
+                                <h3>Total Customers</h3>
+                                <div class="number">${data.total_customers}</div>
+                            </div>
+                            <div class="card">
+                                <h3>Average Order Value</h3>
+                                <div class="number">$${data.average_order_value}</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Top Products</h3>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Category</th>
+                                            <th>Quantity Sold</th>
+                                            <th>Revenue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${data.top_products.map(product => `
+                                            <tr>
+                                                <td>${product.name}</td>
+                                                <td>${product.category}</td>
+                                                <td>${product.quantity_sold}</td>
+                                                <td>$${product.revenue}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('analyticsContent').innerHTML = analyticsHtml;
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        function showAddProductModal() {
+            document.getElementById('addProductModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        async function addProduct() {
+            const name = document.getElementById('productName').value;
+            const price = document.getElementById('productPrice').value;
+            const stock = document.getElementById('productStock').value;
+            const description = document.getElementById('productDescription').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/products/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        slug: name.toLowerCase().replace(/\s+/g, '-'),
+                        description,
+                        short_description: description,
+                        price,
+                        category: 1,
+                        stock_quantity: parseInt(stock),
+                        is_featured: false,
+                        is_bestseller: false,
+                        sku: `SKU-${Date.now()}`
+                    })
+                });
+
+                if (response.ok) {
+                    closeModal('addProductModal');
+                    loadProducts();
+                    // Clear form
+                    document.getElementById('productName').value = '';
+                    document.getElementById('productPrice').value = '';
+                    document.getElementById('productStock').value = '';
+                    document.getElementById('productDescription').value = '';
+                } else {
+                    const data = await response.json();
+                    alert('Error adding product: ' + JSON.stringify(data));
+                }
+            } catch (error) {
+                console.error('Error adding product:', error);
+                alert('Error adding product');
+            }
+        }
+
+        async function restockProduct(productId) {
+            const quantity = prompt('Enter quantity to restock:');
+            if (!quantity) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/inventory/${productId}/restock/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ quantity: parseInt(quantity) })
+                });
+
+                if (response.ok) {
+                    loadInventory();
+                    alert('Product restocked successfully!');
+                } else {
+                    const data = await response.json();
+                    alert('Error restocking: ' + JSON.stringify(data));
+                }
+            } catch (error) {
+                console.error('Error restocking:', error);
+                alert('Error restocking product');
+            }
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function refreshDashboard() {
+            loadDashboard();
+        }
+
+        // Load dashboard on page load
+        if (authToken) {
+            loadDashboard();
+        }
+    </script>
+</body>
+</html>

@@ -14,7 +14,7 @@ docker-compose up -d --build
 
 # Wait for services to be ready
 echo "⏳ Waiting for services to be ready..."
-sleep 10
+sleep 15
 
 # Run migrations
 echo "🗄️ Running database migrations..."
@@ -32,6 +32,10 @@ else:
     print('Superuser already exists')
 "
 
+# Collect static files
+echo "📁 Collecting static files..."
+docker-compose exec -T backend python manage.py collectstatic --noinput
+
 echo "✅ Setup complete!"
 echo ""
 echo "🌐 Access your applications:"
@@ -47,3 +51,4 @@ echo "📝 Useful commands:"
 echo "   View logs: docker-compose logs -f [service]"
 echo "   Stop services: docker-compose down"
 echo "   Restart services: docker-compose restart"
+echo "   View all logs: docker-compose logs -f"

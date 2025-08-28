@@ -6,6 +6,8 @@ from django.db.models import Count, Sum, Avg
 from django.utils import timezone
 from datetime import timedelta
 from decimal import Decimal
+from django.shortcuts import render
+from django.http import HttpResponse
 
 from apps.products.models import Product, Category
 from apps.orders.models import Order
@@ -13,6 +15,11 @@ from apps.users.models import User
 from apps.products.serializers import ProductListSerializer, ProductDetailSerializer, ProductCreateUpdateSerializer, CategorySerializer, CategoryCreateUpdateSerializer
 from apps.orders.serializers import OrderSerializer, OrderCreateUpdateSerializer
 from apps.users.serializers import UserProfileSerializer, UserCreateUpdateSerializer
+
+
+def custom_admin_panel(request):
+    """Custom admin panel interface"""
+    return render(request, 'admin_panel/index.html')
 
 
 @api_view(['GET'])
