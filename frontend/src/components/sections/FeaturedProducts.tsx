@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Star, ShoppingCart, Heart, Eye } from 'lucide-react';
 import { Product } from '@/lib/types';
 import { api } from '@/lib/api/client';
 import ProductCard from '@/components/ui/ProductCard';
@@ -11,6 +11,7 @@ const FeaturedProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [cartLoading, setCartLoading] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
@@ -31,11 +32,14 @@ const FeaturedProducts: React.FC = () => {
 
   const handleAddToCart = async (productId: number) => {
     try {
+      setCartLoading(productId);
       await api.addToCart(productId, 1);
       // You could add a toast notification here
       console.log('Product added to cart');
     } catch (err) {
       console.error('Error adding to cart:', err);
+    } finally {
+      setCartLoading(null);
     }
   };
 
@@ -44,25 +48,43 @@ const FeaturedProducts: React.FC = () => {
     console.log('Added to wishlist:', productId);
   };
 
+  const handleQuickView = (productId: number) => {
+    // Implement quick view functionality
+    console.log('Quick view:', productId);
+    // You could open a modal here
+  };
+
   if (loading) {
     return (
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      <section className="py-24 bg-gradient-to-br from-neutral-50 via-white to-neutral-100 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-warm opacity-5 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-fire opacity-5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center justify-center mb-6">
+              <div className="w-16 h-16 bg-gradient-warm rounded-2xl flex items-center justify-center shadow-glow-warm">
+                <Star className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-display text-neutral-900 mb-6">
               Featured Products
             </h2>
-            <p className="text-lg text-gray-600">
-              Discover our handpicked collection of premium products
+            <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+              Discover our handpicked collection of premium products, carefully curated for your lifestyle
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="animate-pulse">
-                <div className="bg-gray-200 aspect-square rounded-lg mb-4"></div>
-                <div className="space-y-2">
+                <div className="bg-gray-200 aspect-square rounded-2xl mb-4"></div>
+                <div className="space-y-3">
                   <div className="h-4 bg-gray-200 rounded"></div>
                   <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2"></div>
                 </div>
               </div>
             ))}
@@ -74,10 +96,13 @@ const FeaturedProducts: React.FC = () => {
 
   if (error) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-24 bg-gradient-to-br from-neutral-50 via-white to-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-red-600 mb-4">{error}</div>
-          <Button onClick={() => window.location.reload()}>
+          <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-3xl">⚠️</span>
+          </div>
+          <div className="text-red-600 mb-4 text-lg">{error}</div>
+          <Button onClick={() => window.location.reload()} className="bg-gradient-warm text-white">
             Try Again
           </Button>
         </div>
@@ -86,51 +111,37 @@ const FeaturedProducts: React.FC = () => {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-br from-warm-orange-50 via-white to-warm-rose-50 relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-br from-neutral-50 via-white to-neutral-100 relative overflow-hidden">
       {/* Enhanced Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-warm opacity-10 rounded-full blur-2xl animate-float"></div>
-        <div className="absolute bottom-10 right-10 w-40 h-40 bg-gradient-fire opacity-8 rounded-full blur-2xl animate-float" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-gradient-sunset opacity-6 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-1/3 right-1/4 w-20 h-20 bg-gradient-rose opacity-7 rounded-full blur-xl animate-float" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-warm opacity-5 rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-fire opacity-5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-gradient-sunset opacity-5 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Enhanced Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-16 animate-fade-in-down">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-warm rounded-xl flex items-center justify-center shadow-glow-warm">
-                <span className="text-2xl">⭐</span>
-              </div>
-              <h2 className="text-4xl lg:text-5xl font-display text-neutral-900">
-                Featured Products
-              </h2>
-            </div>
-            <p className="text-xl text-neutral-600 leading-relaxed max-w-2xl">
-              Discover our handpicked collection of premium products, carefully curated for your lifestyle
-            </p>
-            <div className="flex items-center gap-6 text-sm text-neutral-500">
-              <span className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-gradient-warm rounded-full"></div>
-                Premium Quality
-              </span>
-              <span className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-gradient-fire rounded-full"></div>
-                Fast Delivery
-              </span>
-              <span className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-gradient-sunset rounded-full"></div>
-                Secure Payment
-              </span>
+        <div className="text-center mb-16 animate-fade-in-down">
+          <div className="inline-flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-gradient-warm rounded-2xl flex items-center justify-center shadow-glow-warm">
+              <Star className="w-8 h-8 text-white" />
             </div>
           </div>
-          <button className="relative px-8 py-4 bg-gradient-warm text-white font-semibold rounded-xl hover:shadow-glow-warm transition-all duration-300 group mt-6 sm:mt-0 hover-lift">
+          <h2 className="text-4xl lg:text-5xl font-display text-neutral-900 mb-6">
+            Featured Products
+          </h2>
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed mb-8">
+            Discover our handpicked collection of premium products, carefully curated for quality and style
+          </p>
+          <Button 
+            className="group bg-gradient-warm text-white hover:shadow-glow-warm transition-all duration-300"
+            onClick={() => window.location.href = '/products'}
+          >
             <span className="relative z-10 flex items-center">
               View All Products
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
             </span>
-          </button>
+          </Button>
         </div>
 
         {/* Enhanced Products Grid */}
@@ -142,15 +153,13 @@ const FeaturedProducts: React.FC = () => {
                 className="animate-fade-in-up hover-lift group" 
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="relative">
-                  <ProductCard
-                    product={product}
-                    onAddToCart={handleAddToCart}
-                    onAddToWishlist={handleAddToWishlist}
-                  />
-                  {/* Hover overlay with quick actions */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
-                </div>
+                <ProductCard
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                  onAddToWishlist={handleAddToWishlist}
+                  onQuickView={handleQuickView}
+                  loading={cartLoading === product.id}
+                />
               </div>
             ))}
           </div>
@@ -169,12 +178,15 @@ const FeaturedProducts: React.FC = () => {
         {/* Enhanced View More Button */}
         {products.length > 0 && (
           <div className="text-center mt-16 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <button className="relative px-10 py-4 bg-gradient-fire text-white font-semibold rounded-xl hover:shadow-glow-warm transition-all duration-300 group hover-lift">
+            <Button 
+              className="group bg-gradient-fire text-white hover:shadow-glow-warm transition-all duration-300 hover-lift"
+              onClick={() => window.location.href = '/products'}
+            >
               <span className="relative z-10 flex items-center">
                 Load More Products
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
               </span>
-            </button>
+            </Button>
           </div>
         )}
 

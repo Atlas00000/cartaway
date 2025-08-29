@@ -1,11 +1,34 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShoppingBag, Menu, X, Search, User, Heart } from 'lucide-react';
+import { ShoppingBag, Menu, X, Search, User, Heart, LogOut } from 'lucide-react';
+import { User as UserType } from '@/lib/types';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<UserType | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const authToken = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('user');
+    
+    if (authToken && userData) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    setUser(null);
+    window.location.href = '/';
+  };
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -68,14 +91,52 @@ const Header = () => {
               <Heart className="w-6 h-6 group-hover:fill-primary-500 group-hover:stroke-primary-500 transition-all duration-300" />
               <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
             </button>
-            <button 
-              className="relative p-3 text-neutral-700 hover:text-primary-600 transition-all duration-300 group hover:scale-110"
-              aria-label="Account"
-              title="Account"
-            >
-              <User className="w-6 h-6 group-hover:stroke-primary-500 transition-all duration-300" />
-              <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
-            </button>
+            {isAuthenticated ? (
+              <div className="relative group">
+                <button 
+                  className="relative p-3 text-neutral-700 hover:text-primary-600 transition-all duration-300 group hover:scale-110"
+                  aria-label="Account"
+                  title={user?.first_name || 'Account'}
+                >
+                  <User className="w-6 h-6 group-hover:stroke-primary-500 transition-all duration-300" />
+                  <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
+                </button>
+                
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                  <div className="py-2">
+                    <div className="px-4 py-2 text-sm text-neutral-700 border-b border-neutral-100">
+                      <div className="font-medium">{user?.first_name} {user?.last_name}</div>
+                      <div className="text-xs text-neutral-500">{user?.email}</div>
+                    </div>
+                    <Link href="/profile" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
+                      Profile
+                    </Link>
+                    <Link href="/orders" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
+                      Orders
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link href="/auth/login">
+                <button 
+                  className="relative p-3 text-neutral-700 hover:text-primary-600 transition-all duration-300 group hover:scale-110"
+                  aria-label="Account"
+                  title="Account"
+                >
+                  <User className="w-6 h-6 group-hover:stroke-primary-500 transition-all duration-300" />
+                  <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
+                </button>
+              </Link>
+            )}
             <button 
               className="relative p-3 text-neutral-700 hover:text-primary-600 transition-all duration-300 group hover:scale-110"
               aria-label="Shopping Cart"
