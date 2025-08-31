@@ -1,168 +1,254 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { ArrowRight, Smartphone, Shirt, Home, Heart, BookOpen, Zap } from 'lucide-react';
-import { Category } from '@/lib/types';
-import { api } from '@/lib/api/client';
+import React, { useState } from 'react';
+import { ArrowRight, Star, TrendingUp, Sparkles, Heart, ShoppingBag } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
 const CategoriesSection: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setLoading(true);
-        const response = await api.getCategories();
-        setCategories(response.results || []);
-      } catch (err) {
-        console.error('Error fetching categories:', err);
-        setError('Failed to load categories');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const categories = [
+    {
+      id: 1,
+      name: "Electronics",
+      icon: "⚡",
+      count: "2.4k items",
+      description: "Cutting-edge technology and smart devices",
+      color: "from-blue-500 to-blue-600",
+      bgColor: "from-blue-50 to-blue-100",
+      trending: true,
+      featured: false,
+      products: ["Smartphones", "Laptops", "Headphones", "Smart Watches"]
+    },
+    {
+      id: 2,
+      name: "Fashion",
+      icon: "👔",
+      count: "1.8k items",
+      description: "Trendsetting fashion and accessories",
+      color: "from-pink-500 to-pink-600",
+      bgColor: "from-pink-50 to-pink-100",
+      trending: false,
+      featured: true,
+      products: ["Clothing", "Shoes", "Bags", "Jewelry"]
+    },
+    {
+      id: 3,
+      name: "Home & Living",
+      icon: "🏠",
+      count: "3.2k items",
+      description: "Transform your living space",
+      color: "from-green-500 to-green-600",
+      bgColor: "from-green-50 to-green-100",
+      trending: true,
+      featured: false,
+      products: ["Furniture", "Decor", "Kitchen", "Bedding"]
+    },
+    {
+      id: 4,
+      name: "Sports & Fitness",
+      icon: "🏃",
+      count: "1.1k items",
+      description: "Active lifestyle and wellness",
+      color: "from-orange-500 to-orange-600",
+      bgColor: "from-orange-50 to-orange-100",
+      trending: false,
+      featured: true,
+      products: ["Workout Gear", "Sports Equipment", "Nutrition", "Fitness Tech"]
+    },
+    {
+      id: 5,
+      name: "Beauty & Care",
+      icon: "💄",
+      count: "956 items",
+      description: "Premium beauty and personal care",
+      color: "from-purple-500 to-purple-600",
+      bgColor: "from-purple-50 to-purple-100",
+      trending: true,
+      featured: false,
+      products: ["Skincare", "Makeup", "Hair Care", "Fragrances"]
+    },
+    {
+      id: 6,
+      name: "Books & Media",
+      icon: "📚",
+      count: "2.7k items",
+      description: "Knowledge and entertainment",
+      color: "from-indigo-500 to-indigo-600",
+      bgColor: "from-indigo-50 to-indigo-100",
+      trending: false,
+      featured: true,
+      products: ["Books", "E-books", "Audiobooks", "Magazines"]
+    },
+  ];
 
-    fetchCategories();
-  }, []);
-
-  // Icon mapping for categories
-  const getCategoryIcon = (categoryName: string) => {
-    const name = categoryName.toLowerCase();
-    if (name.includes('electronics') || name.includes('phone')) return Smartphone;
-    if (name.includes('fashion') || name.includes('clothing')) return Shirt;
-    if (name.includes('home') || name.includes('garden')) return Home;
-    if (name.includes('sports') || name.includes('outdoor')) return Heart;
-    if (name.includes('book') || name.includes('media')) return BookOpen;
-    return Zap; // Default icon
+  const handleCategoryClick = (categoryId: number) => {
+    setSelectedCategory(categoryId);
+    // Navigate to category page
+    window.location.href = `/categories/${categoryId}`;
   };
 
-  if (loading) {
-    return (
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Shop by Category
-            </h2>
-            <p className="text-lg text-gray-600">
-              Explore our curated collections
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {[...Array(6)].map((_, index) => (
-              <div key={index} className="animate-pulse">
-                <div className="bg-gray-200 aspect-square rounded-lg mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-red-600 mb-4">{error}</div>
-          <Button onClick={() => window.location.reload()}>
-            Try Again
-          </Button>
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section className="py-16 bg-gradient-to-br from-neutral-50 to-white relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-br from-neutral-50 via-white to-neutral-100 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-10 right-10 w-32 h-32 bg-gradient-warm opacity-5 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-10 left-10 w-40 h-40 bg-gradient-sunset opacity-5 rounded-full blur-2xl"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-primary opacity-5 rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-warm opacity-5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-gradient-sunset opacity-5 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
-      
+
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12 animate-fade-in-down">
+        {/* Enhanced Header */}
+        <div className="text-center mb-16 animate-fade-in-down">
+          <div className="inline-flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
+              <ShoppingBag className="w-8 h-8 text-white" />
+            </div>
+          </div>
           <h2 className="text-4xl lg:text-5xl font-display text-neutral-900 mb-6">
             Shop by Category
           </h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
-            Discover our carefully curated collections designed to elevate your lifestyle
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed mb-8">
+            Explore our curated collections across diverse categories, each designed to enhance your lifestyle
           </p>
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-neutral-500">
+            <span className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-orange-500" />
+              Trending Categories
+            </span>
+            <span className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-purple-500" />
+              Featured Collections
+            </span>
+            <span className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-yellow-500" />
+              Premium Quality
+            </span>
+          </div>
         </div>
 
-        {/* Categories Grid */}
-        {categories.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categories.map((category, index) => {
-              const IconComponent = getCategoryIcon(category.name);
-              const gradientClasses = [
-                'bg-gradient-to-br from-primary-50 to-accent-50',
-                'bg-gradient-to-br from-warm-orange-50 to-warm-rose-50',
-                'bg-gradient-to-br from-warm-amber-50 to-accent-50',
-                'bg-gradient-to-br from-accent-50 to-warm-orange-50',
-                'bg-gradient-to-br from-warm-rose-50 to-warm-amber-50',
-                'bg-gradient-to-br from-warm-orange-50 to-primary-50'
-              ];
-              const iconColors = [
-                'text-primary-600',
-                'text-warm-orange-600',
-                'text-warm-amber-600',
-                'text-accent-600',
-                'text-warm-rose-600',
-                'text-warm-orange-600'
-              ];
-              
-              return (
-                <div
-                  key={category.id}
-                  className="group cursor-pointer animate-fade-in-up hover-lift"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => window.location.href = `/category/${category.slug}`}
-                >
-                  <div className={`relative overflow-hidden rounded-xl ${gradientClasses[index % gradientClasses.length]} p-6 text-center transition-all duration-300 group-hover:shadow-premium group-hover:scale-105`}>
-                    <div className="mb-4 flex justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-glow group-hover:shadow-glow-warm transition-all duration-300">
-                        <IconComponent className={`h-8 w-8 ${iconColors[index % iconColors.length]}`} />
-                      </div>
-                    </div>
-                    <h3 className="font-heading text-neutral-900 mb-2">
-                      {category.name}
-                    </h3>
-                    <p className="text-sm text-neutral-600 mb-3">
-                      {category.product_count} products
-                    </p>
-                    <div className={`flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ${iconColors[index % iconColors.length]}`}>
-                      <ArrowRight className="h-4 w-4" />
-                    </div>
+        {/* Enhanced Categories Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {categories.map((category, index) => (
+            <div
+              key={category.id}
+              className={`group relative bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 cursor-pointer animate-fade-in-up ${
+                selectedCategory === category.id ? 'ring-2 ring-primary-500' : ''
+              }`}
+              style={{ animationDelay: `${index * 0.1}s` }}
+              onMouseEnter={() => setHoveredCategory(category.id)}
+              onMouseLeave={() => setHoveredCategory(null)}
+              onClick={() => handleCategoryClick(category.id)}
+            >
+              {/* Badges */}
+              <div className="absolute top-4 right-4 flex gap-2">
+                {category.trending && (
+                  <div className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full shadow-lg">
+                    <TrendingUp className="w-3 h-3" />
+                  </div>
+                )}
+                {category.featured && (
+                  <div className="px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg">
+                    <Sparkles className="w-3 h-3" />
+                  </div>
+                )}
+              </div>
+
+              {/* Category Icon */}
+              <div className="relative mb-6">
+                <div className={`w-20 h-20 bg-gradient-to-r ${category.color} rounded-2xl flex items-center justify-center shadow-glow group-hover:shadow-glow-warm transition-all duration-300 group-hover:scale-110`}>
+                  <span className="text-3xl">{category.icon}</span>
+                </div>
+                <div className={`absolute -inset-2 bg-gradient-to-r ${category.color} rounded-2xl opacity-0 group-hover:opacity-20 blur transition-opacity duration-300`}></div>
+              </div>
+
+              {/* Category Info */}
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-2xl font-display text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors duration-300">
+                    {category.name}
+                  </h3>
+                  <p className="text-neutral-600 leading-relaxed">
+                    {category.description}
+                  </p>
+                </div>
+
+                {/* Product Count */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-neutral-500">
+                    {category.count}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <span className="text-sm font-medium text-neutral-700">4.8</span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <div className="text-neutral-500 mb-4">No categories available</div>
-            <Button onClick={() => window.location.reload()}>
-              Refresh
-            </Button>
-          </div>
-        )}
 
-        {/* View All Categories Button */}
-        {categories.length > 0 && (
-          <div className="text-center mt-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-            <button className="btn-premium group">
-              View All Categories
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
+                {/* Product Examples */}
+                <div className="pt-4 border-t border-neutral-100">
+                  <div className="flex flex-wrap gap-2">
+                    {category.products.slice(0, 3).map((product, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-neutral-100 text-neutral-600 text-xs font-medium rounded-full hover:bg-neutral-200 transition-colors duration-300"
+                      >
+                        {product}
+                      </span>
+                    ))}
+                    {category.products.length > 3 && (
+                      <span className="px-3 py-1 bg-gradient-to-r from-primary-500 to-accent-500 text-white text-xs font-medium rounded-full">
+                        +{category.products.length - 3} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <div className="pt-4">
+                  <Button
+                    className={`w-full bg-gradient-to-r ${category.color} hover:shadow-lg transition-all duration-300 group`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCategoryClick(category.id);
+                    }}
+                  >
+                    <span className="relative z-10">Explore {category.name}</span>
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Enhanced CTA Section */}
+        <div className="text-center">
+          <div className="bg-gradient-to-r from-primary-50 to-accent-50 rounded-3xl p-8 border border-primary/20">
+            <h3 className="text-2xl font-display text-neutral-900 mb-4">Can't Find What You're Looking For?</h3>
+            <p className="text-lg text-neutral-600 mb-6">Browse our complete catalog or get personalized recommendations</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                className="btn-premium group"
+                onClick={() => window.location.href = '/products'}
+              >
+                <span className="relative z-10">Browse All Products</span>
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              </Button>
+              <Button 
+                variant="outline"
+                className="bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white hover:shadow-premium transition-all duration-300"
+                onClick={() => window.location.href = '/contact'}
+              >
+                <span className="relative z-10">Get Recommendations</span>
+                <Heart className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

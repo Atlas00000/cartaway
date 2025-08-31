@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Header from './Header';
 import Footer from './Footer';
 import MobileOptimizedSections from '@/components/sections/MobileOptimizedSections';
@@ -11,6 +13,7 @@ interface ResponsiveLayoutProps {
 
 const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -27,6 +30,10 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children }) => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
+  const handleSearchClick = () => {
+    router.push('/products');
+  };
+
   if (isMobile) {
     // For mobile, we'll use a simplified layout without the complex header/footer
     return (
@@ -42,7 +49,12 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children }) => {
                 <span className="text-xl font-display text-gradient">CartAway</span>
               </div>
               <div className="flex items-center space-x-2">
-                <button className="p-2 text-neutral-600 hover:text-primary-600 transition-colors" aria-label="Search" title="Search">
+                <button 
+                  onClick={handleSearchClick}
+                  className="p-2 text-neutral-600 hover:text-primary-600 transition-colors" 
+                  aria-label="Search" 
+                  title="Search"
+                >
                   <span className="text-lg">🔍</span>
                 </button>
                 <button className="p-2 text-neutral-600 hover:text-primary-600 transition-colors relative" aria-label="Cart" title="Cart">

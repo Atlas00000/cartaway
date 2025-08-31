@@ -177,7 +177,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <Button
             onClick={handleAddToCartClick}
             loading={loading}
-            className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold hover:shadow-lg transition-all duration-300 group"
+            className="flex-1 btn-premium group"
             size="sm"
           >
             <ShoppingCart className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
@@ -186,7 +186,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <Button 
             onClick={handleWishlistClick}
             variant="outline"
-            className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:shadow-lg transition-all duration-300"
+            className="bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white hover:shadow-premium transition-all duration-300"
             size="sm"
           >
             <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current text-red-500' : ''}`} />

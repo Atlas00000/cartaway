@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
-import { api } from '@/lib/api/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -15,6 +16,7 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,18 +24,40 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await api.login(formData);
+      await login(formData.email, formData.password);
       
-      // Store tokens in localStorage
-      localStorage.setItem('authToken', response.tokens.access);
-      localStorage.setItem('refreshToken', response.tokens.refresh);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      // Show success message briefly before redirect
+      setSuccess('Login successful! Redirecting...');
       
-      // Redirect to home page
-      router.push('/');
+      // Redirect to home page after a short delay
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
     } catch (err: any) {
       console.error('Login error:', err);
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error('Error response:', err.response);
+      
+      // More detailed error handling
+      if (err.response?.status === 400) {
+        const errorData = err.response.data;
+        if (errorData?.detail) {
+          setError(`Login error: ${errorData.detail}`);
+        } else if (errorData?.message) {
+          setError(errorData.message);
+        } else if (typeof errorData === 'string') {
+          setError(errorData);
+        } else {
+          setError('Invalid email or password. Please check your credentials.');
+        }
+      } else if (err.response?.status === 401) {
+        setError('Invalid email or password. Please check your credentials.');
+      } else if (err.response?.status === 404) {
+        setError('User not found. Please check your email or register a new account.');
+      } else if (err.code === 'NETWORK_ERROR') {
+        setError('Network error. Please check your connection and try again.');
+      } else {
+        setError('Login failed. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
@@ -68,6 +92,12 @@ const LoginPage: React.FC = () => {
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
+            
+            {success && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-green-600 text-sm">{success}</p>
               </div>
             )}
 

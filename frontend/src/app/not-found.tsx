@@ -1,10 +1,21 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Home, ShoppingBag, Users, Mail, ArrowRight, Sparkles, Search, Heart } from 'lucide-react';
 
-const NotFoundPage: React.FC = () => {
+export default function NotFound() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
+
   const quickLinks = [
     {
       icon: Home,
@@ -72,15 +83,17 @@ const NotFoundPage: React.FC = () => {
           
           {/* Search Suggestion */}
           <div className="max-w-md mx-auto mb-8">
-            <div className="relative group">
+            <form onSubmit={handleSearch} className="relative group">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5 group-focus-within:text-warm-orange-500 transition-colors duration-300" />
               <input
                 type="text"
                 placeholder="Search for products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white border border-neutral-200 rounded-xl focus:ring-2 focus:ring-warm-orange-500 focus:border-transparent transition-all duration-300 group-hover:border-warm-orange-200"
               />
-              <div className="absolute inset-0 bg-gradient-warm opacity-0 group-focus-within:opacity-5 rounded-xl transition-opacity duration-300"></div>
-            </div>
+              <div className="absolute inset-0 bg-gradient-warm opacity-0 group-focus-within:opacity-5 rounded-xl transition-opacity duration-300 pointer-events-none"></div>
+            </form>
           </div>
         </div>
 
@@ -215,5 +228,3 @@ const NotFoundPage: React.FC = () => {
     </div>
   );
 };
-
-export default NotFoundPage;

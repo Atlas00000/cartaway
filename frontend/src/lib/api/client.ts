@@ -87,7 +87,36 @@ export const api = {
   },
 
   register: async (userData: any) => {
-    const response = await apiClient.post('/auth/register/', userData);
+    try {
+      console.log('Sending registration data:', userData);
+      const response = await apiClient.post('/auth/register/', userData);
+      console.log('Registration response:', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('API Registration error:', error);
+      console.error('Error response:', error.response);
+      throw error;
+    }
+  },
+
+  // Profile
+  getProfile: async () => {
+    const response = await apiClient.get('/auth/profile/');
+    return response.data;
+  },
+
+  updateProfile: async (profileData: any) => {
+    const response = await apiClient.put('/auth/profile/', profileData);
+    return response.data;
+  },
+
+  changePassword: async (passwordData: { current_password: string; new_password: string }) => {
+    const response = await apiClient.post('/auth/change-password/', passwordData);
+    return response.data;
+  },
+
+  logout: async () => {
+    const response = await apiClient.post('/auth/logout/');
     return response.data;
   },
 

@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
-import { api } from '@/lib/api/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     first_name: '',
@@ -20,11 +21,45 @@ const RegisterPage: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    // Client-side validation
+    if (!formData.username.trim()) {
+      setError('Username is required');
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.first_name.trim()) {
+      setError('First name is required');
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.last_name.trim()) {
+      setError('Last name is required');
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setError('Email is required');
+      setLoading(false);
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
 
     if (formData.password !== formData.password_confirm) {
       setError('Passwords do not match');
@@ -38,8 +73,16 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
+    // Username validation (alphanumeric and underscores only)
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(formData.username)) {
+      setError('Username can only contain letters, numbers, and underscores');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await api.register({
+      await register({
         username: formData.username,
         first_name: formData.first_name,
         last_name: formData.last_name,
@@ -48,14 +91,52 @@ const RegisterPage: React.FC = () => {
         password_confirm: formData.password_confirm,
       });
       
-      localStorage.setItem('authToken', response.tokens.access);
-      localStorage.setItem('refreshToken', response.tokens.refresh);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      // Show success message briefly before redirect
+      setSuccess('Registration successful! Welcome to CartAway. Redirecting...');
       
-      router.push('/');
+      // Redirect to home page after a short delay
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     } catch (err: any) {
       console.error('Registration error:', err);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      console.error('Error response:', err.response);
+      console.error('Request data:', {
+        username: formData.username,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        password: formData.password,
+        password_confirm: formData.password_confirm,
+      });
+      
+      // More detailed error handling
+      if (err.response?.status === 400) {
+        const errorData = err.response.data;
+        if (errorData?.email && errorData?.username) {
+          setError('Both email and username are already taken. Please choose different ones.');
+        } else if (errorData?.email) {
+          setError('This email address is already registered. Please use a different email or try logging in.');
+        } else if (errorData?.username) {
+          setError('This username is already taken. Please choose a different username.');
+        } else if (errorData?.detail) {
+          setError(`Validation error: ${errorData.detail}`);
+        } else if (errorData?.message) {
+          setError(errorData.message);
+        } else if (typeof errorData === 'string') {
+          setError(errorData);
+        } else {
+          setError('Invalid registration data. Please check your information and try again.');
+        }
+      } else if (err.response?.status === 409) {
+        setError('User already exists with this email or username.');
+      } else if (err.response?.status === 422) {
+        setError('Please check your input data and try again.');
+      } else if (err.code === 'NETWORK_ERROR') {
+        setError('Network error. Please check your connection and try again.');
+      } else {
+        setError('Registration failed. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
@@ -90,6 +171,12 @@ const RegisterPage: React.FC = () => {
                 <p className="text-red-600 text-sm">{error}</p>
               </div>
             )}
+            
+            {success && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-green-600 text-sm">{success}</p>
+              </div>
+            )}
 
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-neutral-700 mb-2">
@@ -105,7 +192,7 @@ const RegisterPage: React.FC = () => {
                   value={formData.username}
                   onChange={handleInputChange}
                   className="w-full pl-10 pr-4 py-3 bg-white border border-neutral-200 rounded-xl focus:ring-2 focus:ring-warm-orange-500 focus:border-transparent transition-all duration-300"
-                  placeholder="Choose a username"
+                  placeholder="Choose a username (letters, numbers, underscores only)"
                 />
               </div>
             </div>
@@ -245,6 +332,17 @@ const RegisterPage: React.FC = () => {
                   Privacy Policy
                 </Link>
               </label>
+            </div>
+
+            {/* Helpful Tips */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">💡 Registration Tips:</h4>
+              <ul className="text-xs text-blue-800 space-y-1">
+                <li>• Username must be unique and contain only letters, numbers, and underscores</li>
+                <li>• Email address must be unique and valid</li>
+                <li>• Password must be at least 8 characters long</li>
+                <li>• If you already have an account, try <Link href="/auth/login" className="text-blue-600 hover:text-blue-500 underline">logging in</Link> instead</li>
+              </ul>
             </div>
 
             <button

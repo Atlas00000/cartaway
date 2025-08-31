@@ -18,6 +18,7 @@ export interface Product {
   is_active: boolean;
   is_featured: boolean;
   is_bestseller: boolean;
+  is_new?: boolean;
   category: Category;
   primary_image?: string;
   meta_title: string;

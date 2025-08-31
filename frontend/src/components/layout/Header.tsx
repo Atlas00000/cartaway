@@ -2,33 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ShoppingBag, Menu, X, Search, User, Heart, LogOut } from 'lucide-react';
-import { User as UserType } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<UserType | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Check if user is authenticated
-    const authToken = localStorage.getItem('authToken');
-    const userData = localStorage.getItem('user');
-    
-    if (authToken && userData) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(userData));
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-    setUser(null);
-    window.location.href = '/';
-  };
+  const [searchTerm, setSearchTerm] = useState('');
+  const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -37,6 +19,26 @@ const Header = () => {
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
   ];
+
+  const authNavigation = [
+    { name: 'Login', href: '/auth/login' },
+    { name: 'Register', href: '/auth/register' },
+  ];
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
+
+  const handleMobileSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <header className="glass sticky top-0 z-50 border-b border-white/20">
@@ -70,15 +72,17 @@ const Header = () => {
 
           {/* Search Bar */}
           <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full group">
+            <form onSubmit={handleSearch} className="relative w-full group">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5 group-focus-within:text-primary-500 transition-colors duration-300" />
               <input
                 type="text"
                 placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white/80 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white transition-all duration-300 placeholder-neutral-500"
               />
-              <div className="absolute inset-0 bg-gradient-primary opacity-0 group-focus-within:opacity-5 rounded-xl transition-opacity duration-300"></div>
-            </div>
+              <div className="absolute inset-0 bg-gradient-primary opacity-0 group-focus-within:opacity-5 rounded-xl transition-opacity duration-300 pointer-events-none"></div>
+            </form>
           </div>
 
           {/* Right Icons */}
@@ -116,7 +120,7 @@ const Header = () => {
                       Orders
                     </Link>
                     <button
-                      onClick={handleLogout}
+                      onClick={logout}
                       className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                     >
                       <LogOut className="w-4 h-4" />
@@ -126,7 +130,7 @@ const Header = () => {
                 </div>
               </div>
             ) : (
-              <Link href="/auth/login">
+              <div className="relative group">
                 <button 
                   className="relative p-3 text-neutral-700 hover:text-primary-600 transition-all duration-300 group hover:scale-110"
                   aria-label="Account"
@@ -135,7 +139,26 @@ const Header = () => {
                   <User className="w-6 h-6 group-hover:stroke-primary-500 transition-all duration-300" />
                   <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
                 </button>
-              </Link>
+                
+                {/* Auth Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                  <div className="py-2">
+                    <div className="px-4 py-2 text-sm text-neutral-700 border-b border-neutral-100">
+                      <div className="font-medium">Guest User</div>
+                      <div className="text-xs text-neutral-500">Sign in to access your account</div>
+                    </div>
+                    {authNavigation.map((item) => (
+                      <Link 
+                        key={item.name} 
+                        href={item.href} 
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
             <button 
               className="relative p-3 text-neutral-700 hover:text-primary-600 transition-all duration-300 group hover:scale-110"
@@ -175,14 +198,16 @@ const Header = () => {
               ))}
             </div>
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="relative">
+              <form onSubmit={handleMobileSearch} className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
-              </div>
+              </form>
             </div>
           </div>
         )}
